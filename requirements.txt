@@ -3,6 +3,7 @@ uvicorn[standard]
 diffusers==0.27.2
 transformers==4.40.2
 accelerate==0.29.3
+huggingface_hub==0.23.4
 
 safetensors
 Pillow
