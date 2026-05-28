@@ -11,7 +11,7 @@ logger = logging.getLogger(__name__)
 app = FastAPI()
 
 pipe = None
-MODEL_PATH = "/mnt/models/juggernaut-xl-v9"
+MODEL_PATH = "/mnt/models/model"
 
 # Prefijo de prompt optimizado para reconstrucción 3D
 SYSTEM_PROMPT_PREFIX = (
