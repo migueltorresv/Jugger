@@ -64,6 +64,21 @@ def health():
     return {"status": "ok"}
 
 
+@app.get("/debug")
+def debug():
+    import os
+    result = {}
+    for base in ["/mnt", "/mnt/models", "/mnt/models/juggernaut-xl-v9"]:
+        if os.path.exists(base):
+            try:
+                result[base] = os.listdir(base)
+            except Exception as e:
+                result[base] = str(e)
+        else:
+            result[base] = "NOT FOUND"
+    return result
+
+
 @app.post("/generate")
 def generate(request: GenerateRequest):
     try:
