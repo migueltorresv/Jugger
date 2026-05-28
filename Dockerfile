@@ -1,4 +1,4 @@
-FROM nvidia/cuda:12.1.0-cudnn8-runtime-ubuntu22.04
+FROM nvidia/cuda:12.2.0-cudnn8-runtime-ubuntu22.04
 
 ENV DEBIAN_FRONTEND=noninteractive
 ENV PYTHONUNBUFFERED=1
@@ -13,6 +13,7 @@ RUN apt-get update && apt-get install -y \
 
 # Dependencias Python
 COPY requirements.txt .
+RUN pip3 install --no-cache-dir torch --index-url https://download.pytorch.org/whl/cu121
 RUN pip3 install --no-cache-dir -r requirements.txt
 
 # Código de la aplicación
