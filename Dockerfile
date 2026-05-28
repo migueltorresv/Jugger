@@ -1,4 +1,4 @@
-FROM pytorch/pytorch:2.2.0-cuda12.1-cudnn8-runtime
+FROM nvidia/cuda:12.1.1-cudnn8-runtime-ubuntu22.04
 
 ENV DEBIAN_FRONTEND=noninteractive
 ENV PYTHONUNBUFFERED=1
@@ -6,17 +6,18 @@ ENV PYTHONUNBUFFERED=1
 WORKDIR /app
 
 # Dependencias del sistema
-RUN apt-get update && apt-get install -y \
-    python3-pip \
-    && rm -rf /var/lib/apt/lists/*
+RUN apt-get update && apt-get install -y python3.10 python3-pip && rm -rf /var/lib/apt/lists/*
 
-# Dependencias Python
+# Instalar PyTorch compilado específicamente para CUDA 12.1
+RUN pip3 install --no-cache-dir torch==2.2.0+cu121 torchvision==0.17.0+cu121 --index-url https://download.pytorch.org/whl/cu121
+
+# Resto de dependencias
 COPY requirements.txt .
-RUN pip install --no-cache-dir -r requirements.txt
+RUN pip3 install --no-cache-dir -r requirements.txt
 
 # Código de la aplicación
 COPY app.py .
 
 EXPOSE 8080
 
-CMD ["uvicorn", "app:app", "--host", "0.0.0.0", "--port", "8080", "--timeout-keep-alive", "120"]
+CMD ["python3", "-m", "uvicorn", "app:app", "--host", "0.0.0.0", "--port", "8080", "--timeout-keep-alive", "120"]
