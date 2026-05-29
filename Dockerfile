@@ -6,7 +6,7 @@ ENV PYTHONUNBUFFERED=1
 WORKDIR /app
 
 # Dependencias del sistema
-RUN apt-get update && apt-get install -y python3.10 python3-pip libglib2.0-0 && rm -rf /var/lib/apt/lists/*
+RUN apt-get update && apt-get install -y python3.10 python3-pip libglib2.0-0 libxext6 libsm6 libxrender1 libgl1 libgl1-mesa-glx && rm -rf /var/lib/apt/lists/*
 
 # Instalar PyTorch compilado específicamente para CUDA 12.1
 RUN pip3 install --no-cache-dir torch==2.2.0+cu121 torchvision==0.17.0+cu121 --index-url https://download.pytorch.org/whl/cu121
