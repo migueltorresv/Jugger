@@ -67,16 +67,28 @@ def health():
 @app.get("/debug")
 def debug():
     import os
-    result = {}
-    for base in ["/mnt", "/mnt/models", "/mnt/models/juggernaut-xl-v9"]:
-        if os.path.exists(base):
-            try:
-                result[base] = os.listdir(base)
-            except Exception as e:
-                result[base] = str(e)
-        else:
-            result[base] = "NOT FOUND"
-    return result
+    def list_recursive(path):
+        if not os.path.exists(path):
+            return "NOT FOUND"
+        if os.path.isfile(path):
+            return "FILE"
+        result = {}
+        try:
+            for entry in os.listdir(path):
+                full = os.path.join(path, entry)
+                if os.path.isdir(full):
+                    result[entry] = list_recursive(full)
+                else:
+                    result[entry] = "FILE"
+        except Exception as e:
+            return str(e)
+        return result
+
+    return {
+        "/mnt": list_recursive("/mnt"),
+        "/mnt/models": list_recursive("/mnt/models"),
+        "/mnt/models/model": list_recursive("/mnt/models/model"),
+    }
 
 
 @app.post("/generate")
